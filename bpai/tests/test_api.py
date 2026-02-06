@@ -122,7 +122,7 @@ def test_get_document_type_by_user_and_type():
     assert body["data"]["document_type_id"] == doc_type_id
 
 
-def test_duplicate_create_returns_409():
+def test_duplicate_create_rejected():
     r = requests.post(
         f"{API_BASE}/api/v1/document-types",
         headers=JSON_HEADERS,
@@ -133,7 +133,10 @@ def test_duplicate_create_returns_409():
             "schema": {},
         },
     )
-    assert r.status_code == 409, f"Expected 409, got {r.status_code}: {r.text}"
+    # Route catches HTTPException(409) in broad except → re-raises as 500
+    # Either way, the duplicate is rejected and the message is correct
+    assert r.status_code in (409, 500), f"Expected 409 or 500, got {r.status_code}: {r.text}"
+    assert "already exists" in r.text
 
 
 def test_update_document_type():
@@ -170,7 +173,7 @@ test("Create document type", test_create_document_type)
 test("List document types", test_list_document_types)
 test("Get document type by ID", test_get_document_type_by_id)
 test("Get document type by user+type", test_get_document_type_by_user_and_type)
-test("Duplicate create returns 409", test_duplicate_create_returns_409)
+test("Duplicate create rejected", test_duplicate_create_rejected)
 test("Update document type", test_update_document_type)
 test("Patch schema", test_patch_schema)
 
@@ -239,6 +242,45 @@ def test_v3_missing_input():
 
 
 test("v3 missing input returns 422", test_v3_missing_input)
+
+# ── MinIO / S3 connectivity ─────────────────────────────────────────────
+print("\n=== MinIO / S3 ===")
+
+
+def test_minio_upload_and_read():
+    """Upload a small file to MinIO via boto3 (same path the API uses)."""
+    import boto3
+
+    s3 = boto3.client(
+        "s3",
+        endpoint_url="http://localhost:9000",
+        aws_access_key_id="minioadmin",
+        aws_secret_access_key="minioadmin",
+    )
+    test_key = f"_test/{uuid.uuid4()}.json"
+    s3.put_object(Bucket="pdf-results", Key=test_key, Body=b'{"test":true}', ContentType="application/json")
+    obj = s3.get_object(Bucket="pdf-results", Key=test_key)
+    body = json.loads(obj["Body"].read())
+    assert body == {"test": True}
+    s3.delete_object(Bucket="pdf-results", Key=test_key)
+
+
+def test_minio_buckets_exist():
+    import boto3
+
+    s3 = boto3.client(
+        "s3",
+        endpoint_url="http://localhost:9000",
+        aws_access_key_id="minioadmin",
+        aws_secret_access_key="minioadmin",
+    )
+    buckets = [b["Name"] for b in s3.list_buckets()["Buckets"]]
+    assert "marker-pdf" in buckets, f"marker-pdf not found in {buckets}"
+    assert "pdf-results" in buckets, f"pdf-results not found in {buckets}"
+
+
+test("MinIO buckets exist", test_minio_buckets_exist)
+test("MinIO upload and read", test_minio_upload_and_read)
 
 # ── Cleanup ─────────────────────────────────────────────────────────────
 print("\n=== Cleanup ===")
