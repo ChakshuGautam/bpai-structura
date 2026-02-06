@@ -1,0 +1,147 @@
+1.
+ Purchase_Contract_data{
+	poNumber: string;
+	poDate: string;
+	shipmentPeriod: string;
+	product: string;
+	quality: string;
+	sample: string;
+	quantity: string;
+	packing: string;
+	price: string;
+	payment: string;
+	terms: string;
+	remarks: string;
+	seller_address: string;
+	buyer_address: string;
+	seller_name: string;
+	buyer_name: string;
+}
+---------------------------------------
+2.
+Shipping_Instruction_data{
+	articlecode: string;
+	bl_number: string;
+	bl_to_show: string;
+	bag_label_marking: string;
+	booking_agent_address: string;
+	booking_number: string;
+	icomarknumber: string;
+	articledescription: string;
+	booking_Office: string;
+	po_number: string;
+	buyer_address: string;
+	buyer_other_than_consignee: string;
+	cargo_reference: string;
+	carrier: string;
+	consignee_address: string;
+	consignee_on_bl: string;
+	containers: string;
+	container_type: string;
+	net_weight: string;
+	netweight: string;
+	number_of_containers: string;
+	contract_owner: string;
+	shipping_instruction_date: string;
+	departure_from: string;
+	departure_to: string;
+	soc: string;
+	etd: string;
+	freight_payer: string;
+	grossweight: string;
+	hscode: string;
+	haulage_type: string;
+	incoterm: string;
+	loading_type: string;
+	notifiers: string;
+	packagetype: string;
+	packages: string;
+	packing: string;
+	pieces: string;
+	place_of_discharge: string;
+	place_of_receipt: string;
+	final_destination: string;
+	place_of_loading: string;
+	quality: string;
+	quantity: string;
+	rate_contract_number: string;
+	remarks: string;
+	order_reference_number: string;
+	supplier_address: string;
+	siShipmentPeriod: string;
+	shipment_reference_number: string;
+	shipper_reference_number: string;
+	transportation: string;
+	shipper_address: string;
+	shipper_name: string;
+	buyer_name: string;
+	consignee_name: string;
+	supplier_name: string;
+	booking_agent_name: string;
+	volume: string,
+	commodities: [
+	  {
+		commodity: string;
+		articlecode: string;
+		hscode: string;
+		articledescription: string;
+		packages: string;
+		packagetype: string;
+		volume: string;
+		grossweight: string;
+		netweight: string;
+	  }
+	],
+	notifiers: [
+	  notifierName: string;
+	  notifierAddress: string;
+	  notifierMail: string;
+	  notifierContactNum: string;
+	],
+	documents:[
+	  weight_certificate: number;
+	  quality_certificate: number;
+	  ico_certificate: number;
+	  phytosanitary_certificate: number;
+	  fumigation_certificate: number;
+	  non_gmo_certificate: number;
+	  packaging_listdeclaration: number;
+	  commercial_invoice: number;
+	  container_stuffing_recommendation: number;
+	  packing_list: number;
+	  packaging_declaration: number;
+	  stuffing_report: number;
+	  certificate_of_origin: number;
+	  other: number;
+	  carrier_bill_of_lading: number;
+	  shipping_instructions_appendix_1: number;
+	],
+	containers:[
+	  number_of_containers: string;
+	  container_type: string;
+	  soc: string;
+	  net_weight: string;
+  ]
+
+}
+---------------------------------------
+3.
+Price_Fixation_data{
+	yourReference: string;
+	purchase_contract_date: string;
+	shipmentPeriod: string;
+	product: string;
+	quality: string;
+	sample: string;
+	quantity: string;
+	packing: string;
+	price: string;
+	payment: string;
+	terms: string;
+	remarks: string;
+	seller_address: string;
+	buyer_address: string;
+	seller_name: string;
+	buyer_name: string;
+}
+---------------------------------------

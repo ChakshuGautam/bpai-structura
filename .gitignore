@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.env
+.aws/
+.pytest_cache/
+*.log
+*.pid
+node_modules/
+.DS_Store
+bpai/.env.prod

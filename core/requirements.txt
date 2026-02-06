@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+requests
+python-multipart
+Pillow
+pydantic
+pydantic-settings
+python-dotenv
+numpy
+boto3
+modal
+jsonschema
+typing-extensions
+psycopg2-binary
+supabase
+google-genai
+pdf2image
