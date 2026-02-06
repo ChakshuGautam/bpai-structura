@@ -1,5 +1,6 @@
 import json
 import logging
+from datetime import datetime
 from uuid import UUID
 from typing import List, Optional
 
@@ -9,6 +10,15 @@ from core.db.client import get_connection, put_connection
 from core.models.document_type import DocumentType, DocumentTypeCreate, DocumentTypeUpdate
 
 logger = logging.getLogger(__name__)
+
+
+def _row_to_dict(row) -> dict:
+    """Convert a RealDictRow to a plain dict, stringifying datetime fields."""
+    d = dict(row)
+    for k, v in d.items():
+        if isinstance(v, datetime):
+            d[k] = v.isoformat()
+    return d
 
 
 class DocumentTypeRepository:
@@ -40,7 +50,7 @@ class DocumentTypeRepository:
                 )
                 row = cur.fetchone()
             conn.commit()
-            return DocumentType.model_validate(dict(row))
+            return DocumentType.model_validate(_row_to_dict(row))
         except Exception as e:
             conn.rollback()
             err = str(e)
@@ -59,7 +69,7 @@ class DocumentTypeRepository:
                     (str(document_type_id),),
                 )
                 row = cur.fetchone()
-            return DocumentType.model_validate(dict(row)) if row else None
+            return DocumentType.model_validate(_row_to_dict(row)) if row else None
         finally:
             self._put(conn)
 
@@ -72,7 +82,7 @@ class DocumentTypeRepository:
                     (type_name, str(user_id)),
                 )
                 row = cur.fetchone()
-            return DocumentType.model_validate(dict(row)) if row else None
+            return DocumentType.model_validate(_row_to_dict(row)) if row else None
         finally:
             self._put(conn)
 
@@ -85,7 +95,7 @@ class DocumentTypeRepository:
                     (str(user_id),),
                 )
                 rows = cur.fetchall()
-            return [DocumentType.model_validate(dict(r)) for r in rows]
+            return [DocumentType.model_validate(_row_to_dict(r)) for r in rows]
         finally:
             self._put(conn)
 
@@ -95,7 +105,7 @@ class DocumentTypeRepository:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute("SELECT * FROM document_types")
                 rows = cur.fetchall()
-            return [DocumentType.model_validate(dict(r)) for r in rows]
+            return [DocumentType.model_validate(_row_to_dict(r)) for r in rows]
         finally:
             self._put(conn)
 
@@ -120,7 +130,7 @@ class DocumentTypeRepository:
                 )
                 row = cur.fetchone()
             conn.commit()
-            return DocumentType.model_validate(dict(row)) if row else None
+            return DocumentType.model_validate(_row_to_dict(row)) if row else None
         except Exception as e:
             conn.rollback()
             err = str(e)
